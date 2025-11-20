@@ -1,24 +1,21 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AppProvider } from '../context/AppContext';
+import '../global.css';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+export default function Layout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <AppProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="planner" options={{ presentation: 'card', headerShown: true, title: 'Planner' }} />
+          <Stack.Screen name="scavenger" options={{ presentation: 'card', headerShown: true, title: 'Fridge Scavenger' }} />
+          <Stack.Screen name="recipe/[id]" options={{ presentation: 'card', headerShown: false }} />
+          <Stack.Screen name="shopping-list" options={{ presentation: 'modal', title: 'Shopping List', headerShown: true }} />
+          <Stack.Screen name="preferences" options={{ presentation: 'modal', title: 'Settings', headerShown: true }} />
+        </Stack>
+      </AppProvider>
+    </SafeAreaProvider>
   );
 }
