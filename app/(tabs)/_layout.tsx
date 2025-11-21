@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { BookOpen, Home, Settings, ShoppingBag } from 'lucide-react-native';
+import { BookOpen, Home, Settings as SettingsIcon, ShoppingBag } from 'lucide-react-native';
 import React from 'react';
 import { Platform } from 'react-native';
 
@@ -12,7 +12,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tabIconSelected,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].tabIconDefault,
         headerShown: true,
         tabBarStyle: Platform.select({
           ios: {
@@ -26,28 +27,28 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <Home size={28} color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <Home size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="preferences"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color }) => <Settings size={28} color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <SettingsIcon size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="shopping-list"
         options={{
           title: 'Shopping List',
-          tabBarIcon: ({ color }) => <ShoppingBag size={28} color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <ShoppingBag size={28} color={color} />,
         }}
       />
       <Tabs.Screen
         name="cookbook"
         options={{
           title: 'Cookbook',
-          tabBarIcon: ({ color }) => <BookOpen size={28} color={color} />,
+          tabBarIcon: ({ color }: { color: string }) => <BookOpen size={28} color={color} />,
         }}
       />
     </Tabs>
