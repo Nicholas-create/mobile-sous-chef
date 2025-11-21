@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import { Sparkles } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { ActivityIndicator, ScrollView, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import RecipeCard from '../components/RecipeCard';
 import { useApp } from '../context/AppContext';
 import { GeminiService } from '../services/geminiService';
@@ -13,15 +13,46 @@ export default function Planner() {
     const [prompt, setPrompt] = useState('');
     const [loading, setLoading] = useState(false);
     const [recipes, setRecipes] = useState<Recipe[]>([]);
+    const lastRequestTime = useRef<number>(0);
 
     const handleGenerate = async () => {
-        if (!prompt.trim()) return;
+        // Input validation
+        const sanitizedPrompt = prompt.trim();
+
+        if (!sanitizedPrompt) {
+            Alert.alert('Empty Input', 'Please describe what you want to cook');
+            return;
+        }
+
+        if (sanitizedPrompt.length < 3) {
+            Alert.alert('Too Short', 'Please provide more details (at least 3 characters)');
+            return;
+        }
+
+        if (sanitizedPrompt.length > 500) {
+            Alert.alert('Too Long', 'Please keep your request under 500 characters');
+            return;
+        }
+
+        // Rate limiting check
+        const now = Date.now();
+        if (lastRequestTime.current && now - lastRequestTime.current < 2000) {
+            Alert.alert('Slow Down', 'Please wait a moment before trying again');
+            return;
+        }
+        lastRequestTime.current = now;
+
         setLoading(true);
         try {
-            const results = await GeminiService.generateRecipesFromText(prompt, measurementSystem);
-            setRecipes(results);
+            const results = await GeminiService.generateRecipesFromText(sanitizedPrompt, measurementSystem);
+            if (results.length === 0) {
+                Alert.alert('No Results', 'No recipes found. Try different ingredients or keywords.');
+            } else {
+                setRecipes(results);
+            }
         } catch (error) {
-            console.error(error);
+            console.error('Recipe generation error:', error);
+            Alert.alert('Error', 'Failed to generate recipes. Please check your internet connection and try again.');
         } finally {
             setLoading(false);
         }
@@ -61,8 +92,8 @@ export default function Planner() {
                 {recipes.length > 0 && (
                     <View className="pb-10">
                         <Text className="text-xl font-bold text-slate-900 mb-4">Suggestions</Text>
-                        {recipes.map((recipe, index) => (
-                            <RecipeCard key={index} recipe={recipe} />
+                        {recipes.map((recipe) => (
+                            <RecipeCard key={recipe.id} recipe={recipe} />
                         ))}
                     </View>
                 )}

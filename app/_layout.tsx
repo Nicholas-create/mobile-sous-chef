@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider } from '../context/AppContext';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import '../global.css';
 
 LogBox.ignoreLogs([
@@ -11,17 +12,19 @@ LogBox.ignoreLogs([
 
 export default function Layout() {
   return (
-    <SafeAreaProvider>
-      <AppProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="planner" options={{ presentation: 'card', headerShown: true, title: 'Planner', headerBackTitle: 'Back' }} />
-          <Stack.Screen name="scavenger" options={{ presentation: 'card', headerShown: true, title: 'Fridge Scavenger', headerBackTitle: 'Back' }} />
-          <Stack.Screen name="daily-menu" options={{ presentation: 'card', headerShown: true, title: 'Daily Menu', headerBackTitle: 'Back' }} />
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <AppProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="planner" options={{ presentation: 'card', headerShown: true, title: 'Planner', headerBackTitle: 'Back' }} />
+            <Stack.Screen name="scavenger" options={{ presentation: 'card', headerShown: true, title: 'Fridge Scavenger', headerBackTitle: 'Back' }} />
+            <Stack.Screen name="daily-menu" options={{ presentation: 'card', headerShown: true, title: 'Daily Menu', headerBackTitle: 'Back' }} />
 
-          <Stack.Screen name="recipe/[id]" options={{ presentation: 'card', headerShown: false }} />
-        </Stack>
-      </AppProvider>
-    </SafeAreaProvider>
+            <Stack.Screen name="recipe/[id]" options={{ presentation: 'card', headerShown: false }} />
+          </Stack>
+        </AppProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }

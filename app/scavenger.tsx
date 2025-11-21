@@ -2,7 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { Camera, Upload } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, Text, TouchableOpacity, View, Alert } from 'react-native';
 import RecipeCard from '../components/RecipeCard';
 import { useApp } from '../context/AppContext';
 import { GeminiService } from '../services/geminiService';
@@ -20,7 +20,11 @@ export default function Scavenger() {
         if (useCamera) {
             const permission = await ImagePicker.requestCameraPermissionsAsync();
             if (permission.granted === false) {
-                alert("Permission to access camera is required!");
+                Alert.alert(
+                    'Camera Permission Required',
+                    'Camera access is required to scan your fridge. Please enable it in Settings.',
+                    [{ text: 'OK' }]
+                );
                 return;
             }
             result = await ImagePicker.launchCameraAsync({
@@ -50,10 +54,22 @@ export default function Scavenger() {
         setLoading(true);
         try {
             const results = await GeminiService.generateRecipesFromImage(base64, measurementSystem);
-            setRecipes(results);
+            if (results.length === 0) {
+                Alert.alert(
+                    'No Recipes Found',
+                    'No recipes found. Try taking a clearer photo with better lighting.',
+                    [{ text: 'OK' }]
+                );
+            } else {
+                setRecipes(results);
+            }
         } catch (error) {
-            console.error(error);
-            alert('Failed to analyze image');
+            console.error('Image analysis error:', error);
+            Alert.alert(
+                'Analysis Failed',
+                'Unable to analyze image. Please check your internet connection and try again.',
+                [{ text: 'OK' }]
+            );
         } finally {
             setLoading(false);
         }
@@ -103,8 +119,8 @@ export default function Scavenger() {
                 {recipes.length > 0 && (
                     <View className="pb-10">
                         <Text className="text-xl font-bold text-slate-900 mb-4">Suggestions</Text>
-                        {recipes.map((recipe, index) => (
-                            <RecipeCard key={index} recipe={recipe} />
+                        {recipes.map((recipe) => (
+                            <RecipeCard key={recipe.id} recipe={recipe} />
                         ))}
                     </View>
                 )}

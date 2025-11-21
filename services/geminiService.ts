@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AI_CONFIG } from '../constants/aiConfig';
-import { Recipe } from '../types';
+import { Recipe, RecipeArraySchema } from '../types';
 
 const API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(API_KEY);
@@ -48,7 +48,17 @@ export const GeminiService = {
                 generationConfig
             });
             const response = result.response;
-            return JSON.parse(response.text());
+
+            // Safe JSON parsing with validation
+            const rawData = JSON.parse(response.text());
+            const validated = RecipeArraySchema.safeParse(rawData);
+
+            if (!validated.success) {
+                console.error("Invalid recipe data from Gemini:", validated.error);
+                return [];
+            }
+
+            return validated.data;
         } catch (error) {
             console.error("Gemini Text Error:", error);
             return [];
@@ -83,7 +93,17 @@ export const GeminiService = {
                 generationConfig
             });
             const response = result.response;
-            return JSON.parse(response.text());
+
+            // Safe JSON parsing with validation
+            const rawData = JSON.parse(response.text());
+            const validated = RecipeArraySchema.safeParse(rawData);
+
+            if (!validated.success) {
+                console.error("Invalid recipe data from Gemini image:", validated.error);
+                return [];
+            }
+
+            return validated.data;
         } catch (error) {
             console.error("Gemini Image Error:", error);
             return [];
@@ -112,7 +132,17 @@ export const GeminiService = {
                 generationConfig
             });
             const response = result.response;
-            const recipes: Recipe[] = JSON.parse(response.text());
+
+            // Safe JSON parsing with validation
+            const rawData = JSON.parse(response.text());
+            const validated = RecipeArraySchema.safeParse(rawData);
+
+            if (!validated.success) {
+                console.error("Invalid recipe data from daily menu:", validated.error);
+                return [];
+            }
+
+            const recipes = validated.data;
 
             // Generate images for each recipe in parallel
             const recipesWithImages = await Promise.all(recipes.map(async (recipe) => {
@@ -184,11 +214,11 @@ export const GeminiService = {
         }
     },
 
-    async chatWithAssistant(history: { role: string, parts: { text: string }[] }[], message: string): Promise<string> {
+    async chatWithAssistant(history: { role: 'user' | 'model', parts: { text: string }[] }[], message: string): Promise<string> {
         const model = getModel(AI_CONFIG.chatAssistant);
         // Simple chat implementation for CookMode
         const chat = model.startChat({
-            history: history as any,
+            history,
         });
         const result = await chat.sendMessage(message);
         return result.response.text();

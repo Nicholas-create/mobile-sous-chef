@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export enum AppMode {
     DASHBOARD = 'DASHBOARD',
     PLANNER = 'PLANNER',
@@ -38,7 +40,44 @@ export interface Recipe {
 }
 
 export interface ShoppingItem extends Ingredient {
+    id: string; // Added for proper identification
     recipeId: string;
     recipeName: string;
     isBought: boolean;
 }
+
+// Zod Schemas for Runtime Validation
+export const IngredientSchema = z.object({
+    name: z.string(),
+    amount: z.string(),
+    amountMetric: z.string().optional(),
+    amountImperial: z.string().optional(),
+    category: z.string(),
+    isPantryItem: z.boolean(),
+    checked: z.boolean().optional(),
+});
+
+export const RecipeSchema = z.object({
+    id: z.string(),
+    title: z.string(),
+    description: z.string(),
+    prepTime: z.string(),
+    cookTime: z.string(),
+    servings: z.number(),
+    calories: z.number().optional(),
+    ingredients: z.array(IngredientSchema),
+    steps: z.array(z.string()),
+    tags: z.array(z.string()),
+    imageUrl: z.string().optional(),
+    suggestionType: z.enum(['Efficient', 'Fast', 'Craving']).optional(),
+    suggestionReason: z.string().optional(),
+});
+
+export const RecipeArraySchema = z.array(RecipeSchema);
+
+export const ShoppingItemSchema = IngredientSchema.extend({
+    id: z.string(),
+    recipeId: z.string(),
+    recipeName: z.string(),
+    isBought: z.boolean(),
+});

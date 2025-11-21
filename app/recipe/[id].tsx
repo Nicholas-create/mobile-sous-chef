@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CookMode from '../../components/CookMode';
 import PantryAudit from '../../components/PantryAudit';
 import { useApp } from '../../context/AppContext';
-import { Recipe } from '../../types';
+import { Recipe, RecipeSchema } from '../../types';
 import { formatIngredientAmount } from '../../utils/formatting';
 
 export default function RecipeDetails() {
@@ -21,9 +21,21 @@ export default function RecipeDetails() {
 
     useEffect(() => {
         if (params.recipeData) {
-            const parsed = JSON.parse(params.recipeData as string);
-            setRecipe(parsed);
-            setIsSaved(savedRecipes.some(r => r.id === parsed.id));
+            try {
+                const parsed = JSON.parse(params.recipeData as string);
+                const validated = RecipeSchema.safeParse(parsed);
+
+                if (validated.success) {
+                    setRecipe(validated.data);
+                    setIsSaved(savedRecipes.some(r => r.id === validated.data.id));
+                } else {
+                    console.error('Invalid recipe data:', validated.error);
+                    router.back();
+                }
+            } catch (error) {
+                console.error('Failed to parse recipe data:', error);
+                router.back();
+            }
         }
     }, [params.recipeData, savedRecipes]);
 

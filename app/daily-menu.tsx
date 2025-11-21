@@ -51,8 +51,8 @@ export default function DailyMenu() {
                     </View>
                 ) : (
                     <View className="pb-10">
-                        {recipes.map((recipe, index) => (
-                            <View key={index} className="mb-8">
+                        {recipes.map((recipe) => (
+                            <View key={recipe.id} className="mb-8">
                                 <View className="mb-3">
                                     <Text className="text-orange-600 font-bold text-xs uppercase tracking-widest mb-1">
                                         {recipe.suggestionType}
