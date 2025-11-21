@@ -1,8 +1,7 @@
-import { useRouter } from 'expo-router';
-import { ArrowLeft, RefreshCw } from 'lucide-react-native';
+import { Stack, useRouter } from 'expo-router';
+import { RefreshCw } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import RecipeCard from '../components/RecipeCard';
 import { useApp } from '../context/AppContext';
 import { GeminiService } from '../services/geminiService';
@@ -31,20 +30,18 @@ export default function DailyMenu() {
     }, []);
 
     return (
-        <SafeAreaView className="flex-1 bg-slate-50">
-            <View className="px-6 py-4 flex-row items-center justify-between">
-                <View className="flex-row items-center space-x-4">
-                    <TouchableOpacity onPress={() => router.back()}>
-                        <ArrowLeft color="#0f172a" size={24} />
-                    </TouchableOpacity>
-                    <Text className="text-2xl font-bold text-slate-900">Daily Menu</Text>
-                </View>
-                <TouchableOpacity onPress={fetchMenu} disabled={loading}>
-                    <RefreshCw color={loading ? "#cbd5e1" : "#ea580c"} size={24} />
-                </TouchableOpacity>
-            </View>
+        <View className="flex-1 bg-slate-50">
+            <Stack.Screen
+                options={{
+                    headerRight: () => (
+                        <TouchableOpacity onPress={fetchMenu} disabled={loading}>
+                            <RefreshCw color={loading ? "#cbd5e1" : "#ea580c"} size={24} />
+                        </TouchableOpacity>
+                    ),
+                }}
+            />
 
-            <ScrollView className="flex-1 px-6">
+            <ScrollView className="flex-1 px-6 pt-6">
                 <Text className="text-slate-600 mb-6">Here are today's chef suggestions.</Text>
 
                 {loading ? (
@@ -65,6 +62,6 @@ export default function DailyMenu() {
                     </View>
                 )}
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }

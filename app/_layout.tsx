@@ -6,7 +6,8 @@ import '../global.css';
 
 LogBox.ignoreLogs([
   'SafeAreaView has been deprecated',
-  'SafeAreaView has been deprecated and will be removed in a future release. Please use \'react-native-safe-area-context\' instead.'
+  'SafeAreaView has been deprecated and will be removed in a future release. Please use \'react-native-safe-area-context\' instead.',
+  'SafeAreaView has been deprecated and will be removed in a future release. Please use \'react-native-safe-area-context\' instead. See https://github.com/th3rdwave/react-native-safe-area-context'
 ]);
 
 export default function Layout() {
@@ -15,9 +16,9 @@ export default function Layout() {
       <AppProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="planner" options={{ presentation: 'card', headerShown: true, title: 'Planner' }} />
-          <Stack.Screen name="scavenger" options={{ presentation: 'card', headerShown: true, title: 'Fridge Scavenger' }} />
-          <Stack.Screen name="daily-menu" options={{ presentation: 'card', headerShown: true, title: 'Daily Menu' }} />
+          <Stack.Screen name="planner" options={{ presentation: 'card', headerShown: true, title: 'Planner', headerBackTitle: 'Back' }} />
+          <Stack.Screen name="scavenger" options={{ presentation: 'card', headerShown: true, title: 'Fridge Scavenger', headerBackTitle: 'Back' }} />
+          <Stack.Screen name="daily-menu" options={{ presentation: 'card', headerShown: true, title: 'Daily Menu', headerBackTitle: 'Back' }} />
 
           <Stack.Screen name="recipe/[id]" options={{ presentation: 'card', headerShown: false }} />
         </Stack>

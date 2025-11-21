@@ -1,8 +1,7 @@
-import { useRouter } from 'expo-router';
-import { ArrowLeft, Trash2 } from 'lucide-react-native';
+import { useNavigation, useRouter } from 'expo-router';
+import { Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp } from '../../context/AppContext';
 import { formatIngredientAmount } from '../../utils/formatting';
 
@@ -10,6 +9,17 @@ export default function ShoppingList() {
     const router = useRouter();
     const { shoppingList, toggleShoppingItem, measurementSystem, clearShoppingList, removeShoppingItem } = useApp();
     const [groupBy, setGroupBy] = useState<'category' | 'recipe'>('category');
+    const navigation = useNavigation();
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={clearShoppingList} style={{ marginRight: 16 }}>
+                    <Trash2 color="#ef4444" size={24} />
+                </TouchableOpacity>
+            ),
+        });
+    }, [navigation, clearShoppingList]);
 
     const groupedItems = shoppingList.reduce((acc, item) => {
         const key = groupBy === 'category' ? item.category : item.recipeName;
@@ -19,18 +29,7 @@ export default function ShoppingList() {
     }, {} as Record<string, typeof shoppingList>);
 
     return (
-        <SafeAreaView className="flex-1 bg-slate-50">
-            <View className="px-6 py-4 flex-row items-center justify-between">
-                <View className="flex-row items-center space-x-4">
-                    <TouchableOpacity onPress={() => router.back()}>
-                        <ArrowLeft color="#0f172a" size={24} />
-                    </TouchableOpacity>
-                    <Text className="text-2xl font-bold text-slate-900">Shopping List</Text>
-                </View>
-                <TouchableOpacity onPress={clearShoppingList}>
-                    <Trash2 color="#ef4444" size={24} />
-                </TouchableOpacity>
-            </View>
+        <View className="flex-1 bg-slate-50 pt-6">
 
             {/* Toggle Grouping */}
             <View className="px-6 mb-6">
@@ -87,6 +86,6 @@ export default function ShoppingList() {
                 )}
                 <View className="h-20" />
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
