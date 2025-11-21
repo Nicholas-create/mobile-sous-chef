@@ -15,7 +15,7 @@ export const Colors = {
     tint: tintColorLight,
     icon: '#687076',
     tabIconDefault: '#687076',
-    tabIconSelected: '#007AFF', // iOS blue for better visibility
+    tabIconSelected: '#FF8C00', // Orange to match app theme
   },
   dark: {
     text: '#ECEDEE',
@@ -23,7 +23,7 @@ export const Colors = {
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
-    tabIconSelected: '#0A84FF', // iOS blue for dark mode
+    tabIconSelected: '#FFA500', // Bright orange for dark mode
   },
 };
 

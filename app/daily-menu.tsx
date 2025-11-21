@@ -52,10 +52,15 @@ export default function DailyMenu() {
                 ) : (
                     <View className="pb-10">
                         {recipes.map((recipe, index) => (
-                            <View key={index} className="mb-6">
-                                <Text className="text-lg font-bold text-slate-800 mb-2">
-                                    {recipe.suggestionType}: {recipe.suggestionReason}
-                                </Text>
+                            <View key={index} className="mb-8">
+                                <View className="mb-3">
+                                    <Text className="text-orange-600 font-bold text-xs uppercase tracking-widest mb-1">
+                                        {recipe.suggestionType}
+                                    </Text>
+                                    <Text className="text-slate-600 text-sm leading-6">
+                                        {recipe.suggestionReason}
+                                    </Text>
+                                </View>
                                 <RecipeCard recipe={recipe} />
                             </View>
                         ))}
