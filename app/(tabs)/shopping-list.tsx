@@ -3,8 +3,8 @@ import { ArrowLeft, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useApp } from '../context/AppContext';
-import { formatIngredientAmount } from '../utils/formatting';
+import { useApp } from '../../context/AppContext';
+import { formatIngredientAmount } from '../../utils/formatting';
 
 export default function ShoppingList() {
     const router = useRouter();
