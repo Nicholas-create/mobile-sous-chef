@@ -1,7 +1,7 @@
 export const AI_MODELS = {
     geminiFlash: 'gemini-2.5-flash',
     geminiPro: 'gemini-3-pro-preview',
-    imagen: 'imagen-4.0-generate-001',
+    imagen: 'gemini-2.5-flash-image',
 };
 
 export const AI_CONFIG = {
