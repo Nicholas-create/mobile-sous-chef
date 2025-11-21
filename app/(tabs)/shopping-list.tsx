@@ -1,7 +1,6 @@
-import { useNavigation, useRouter } from 'expo-router';
-import { Trash2 } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useApp } from '../../context/AppContext';
 import { formatIngredientAmount } from '../../utils/formatting';
 
@@ -9,17 +8,6 @@ export default function ShoppingList() {
     const router = useRouter();
     const { shoppingList, toggleShoppingItem, measurementSystem, clearShoppingList, removeShoppingItem } = useApp();
     const [groupBy, setGroupBy] = useState<'category' | 'recipe'>('category');
-    const navigation = useNavigation();
-
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity onPress={clearShoppingList} style={{ marginRight: 16 }}>
-                    <Trash2 color="#ef4444" size={24} />
-                </TouchableOpacity>
-            ),
-        });
-    }, [navigation, clearShoppingList]);
 
     const groupedItems = shoppingList.reduce((acc, item) => {
         const key = groupBy === 'category' ? item.category : item.recipeName;
@@ -34,18 +22,38 @@ export default function ShoppingList() {
             {/* Toggle Grouping */}
             <View className="px-6 mb-6">
                 <View className="flex-row bg-slate-200 p-1 rounded-xl">
-                    <TouchableOpacity
-                        className={`flex-1 py-2 rounded-lg items-center ${groupBy === 'category' ? 'bg-white shadow-sm' : ''}`}
+                    <Pressable
+                        style={{
+                            flex: 1,
+                            paddingVertical: 8,
+                            borderRadius: 8,
+                            alignItems: 'center',
+                            backgroundColor: groupBy === 'category' ? 'white' : 'transparent',
+                            shadowColor: groupBy === 'category' ? '#000' : 'transparent',
+                            shadowOpacity: groupBy === 'category' ? 0.1 : 0,
+                            shadowRadius: 2,
+                            elevation: groupBy === 'category' ? 1 : 0
+                        }}
                         onPress={() => setGroupBy('category')}
                     >
-                        <Text className={`font-bold ${groupBy === 'category' ? 'text-slate-900' : 'text-slate-500'}`}>By Category</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        className={`flex-1 py-2 rounded-lg items-center ${groupBy === 'recipe' ? 'bg-white shadow-sm' : ''}`}
+                        <Text style={{ fontWeight: 'bold', color: groupBy === 'category' ? '#0f172a' : '#64748b' }}>By Category</Text>
+                    </Pressable>
+                    <Pressable
+                        style={{
+                            flex: 1,
+                            paddingVertical: 8,
+                            borderRadius: 8,
+                            alignItems: 'center',
+                            backgroundColor: groupBy === 'recipe' ? 'white' : 'transparent',
+                            shadowColor: groupBy === 'recipe' ? '#000' : 'transparent',
+                            shadowOpacity: groupBy === 'recipe' ? 0.1 : 0,
+                            shadowRadius: 2,
+                            elevation: groupBy === 'recipe' ? 1 : 0
+                        }}
                         onPress={() => setGroupBy('recipe')}
                     >
-                        <Text className={`font-bold ${groupBy === 'recipe' ? 'text-slate-900' : 'text-slate-500'}`}>By Recipe</Text>
-                    </TouchableOpacity>
+                        <Text style={{ fontWeight: 'bold', color: groupBy === 'recipe' ? '#0f172a' : '#64748b' }}>By Recipe</Text>
+                    </Pressable>
                 </View>
             </View>
 
