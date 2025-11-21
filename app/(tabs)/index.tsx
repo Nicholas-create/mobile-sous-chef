@@ -28,9 +28,9 @@ export default function Dashboard() {
                     </View>
                 </View>
 
-                <View className="px-6 pt-4 space-y-4">
+                <View className="px-6 pt-4">
                     <TouchableOpacity
-                        className="bg-white border border-orange-100 rounded-[32px] p-5 overflow-hidden"
+                        className="bg-white border border-orange-100 rounded-[32px] p-5 overflow-hidden mb-4"
                         activeOpacity={0.9}
                         onPress={() => router.push('/planner')}
                     >
@@ -48,7 +48,7 @@ export default function Dashboard() {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        className="bg-white border border-blue-100 rounded-[32px] p-5 overflow-hidden"
+                        className="bg-white border border-blue-100 rounded-[32px] p-5 overflow-hidden mb-4"
                         activeOpacity={0.9}
                         onPress={() => router.push('/scavenger')}
                     >
