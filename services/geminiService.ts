@@ -17,7 +17,7 @@ const RECIPE_SCHEMA = `
   prepTime: string,
   cookTime: string,
   servings: number,
-  calories: number (optional),
+  calories: number (REQUIRED - estimated total calories per serving),
   ingredients: Array of { name: string, amount: string, amountMetric: string, amountImperial: string, category: string, isPantryItem: boolean },
   steps: Array of strings,
   tags: Array of strings,
@@ -33,12 +33,13 @@ export const GeminiService = {
         };
 
         const fullPrompt = `
-      Suggest 3 distinct recipes based on: "${prompt}". 
-      Use ${system} units for 'amount'. 
-      CRITICAL: Fill 'amountMetric' AND 'amountImperial' fields for every ingredient. 
-      Ensure ingredients are categorized. 
+      Suggest 3 distinct recipes based on: "${prompt}".
+      Use ${system} units for 'amount'.
+      CRITICAL: Fill 'amountMetric' AND 'amountImperial' fields for every ingredient.
+      CRITICAL: Include 'calories' field with estimated calories per serving for EVERY recipe.
+      Ensure ingredients are categorized.
       Mark staples (salt, oil) as isPantryItem: true.
-      
+
       Return a JSON array matching this schema: ${RECIPE_SCHEMA}
     `;
 
@@ -72,10 +73,11 @@ export const GeminiService = {
         };
 
         const fullPrompt = `
-      Identify ingredients in this image. Suggest 3 recipes made primarily with them. 
-      Assume pantry staples are available. Use ${system} units. 
+      Identify ingredients in this image. Suggest 3 recipes made primarily with them.
+      Assume pantry staples are available. Use ${system} units.
       CRITICAL: Fill 'amountMetric' AND 'amountImperial'.
-      
+      CRITICAL: Include 'calories' field with estimated calories per serving for EVERY recipe.
+
       Return a JSON array matching this schema: ${RECIPE_SCHEMA}
     `;
 
@@ -122,7 +124,8 @@ export const GeminiService = {
       2. 'Fast' (Under 20 mins)
       3. 'Craving' (Contextual comfort food)
       Use ${system} units. Populate 'suggestionType' and 'suggestionReason'.
-      
+      CRITICAL: Include 'calories' field with estimated calories per serving for EVERY recipe.
+
       Return a JSON array matching this schema: ${RECIPE_SCHEMA}
     `;
 

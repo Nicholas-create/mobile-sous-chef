@@ -30,7 +30,7 @@ export interface Recipe {
     prepTime: string;
     cookTime: string;
     servings: number;
-    calories?: number;
+    calories: number;
     ingredients: Ingredient[];
     steps: string[];
     tags: string[];
@@ -64,7 +64,7 @@ export const RecipeSchema = z.object({
     prepTime: z.string(),
     cookTime: z.string(),
     servings: z.number(),
-    calories: z.number().optional(),
+    calories: z.number(),
     ingredients: z.array(IngredientSchema),
     steps: z.array(z.string()),
     tags: z.array(z.string()),
