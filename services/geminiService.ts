@@ -112,10 +112,75 @@ export const GeminiService = {
                 generationConfig
             });
             const response = result.response;
-            return JSON.parse(response.text());
+            const recipes: Recipe[] = JSON.parse(response.text());
+
+            // Generate images for each recipe in parallel
+            const recipesWithImages = await Promise.all(recipes.map(async (recipe) => {
+                try {
+                    const imagePrompt = `A professional food photography shot of ${recipe.title}: ${recipe.description}. High resolution, appetizing, well-lit.`;
+                    const base64Image = await GeminiService.generateImage(imagePrompt);
+                    return { ...recipe, imageUrl: base64Image ? `data:image/jpeg;base64,${base64Image}` : undefined };
+                } catch (imgError) {
+                    console.error(`Failed to generate image for ${recipe.title}:`, imgError);
+                    return recipe;
+                }
+            }));
+
+            return recipesWithImages;
         } catch (error) {
             console.error("Gemini Menu Error:", error);
             return [];
+        }
+    },
+
+    async generateImage(prompt: string): Promise<string | null> {
+        // Use direct REST API for Imagen as SDK support for 'predict' might be limited or different
+        const modelName = AI_CONFIG.imageGenerator;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:predict?key=${API_KEY}`;
+
+        const payload = {
+            instances: [
+                {
+                    prompt: prompt
+                }
+            ],
+            parameters: {
+                sampleCount: 1,
+                aspectRatio: "1:1" // Optional, can be adjusted
+            }
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+            }
+
+            const data = await response.json();
+
+            // Imagen response structure:
+            // { predictions: [ { bytesBase64Encoded: "..." } ] }
+            if (data.predictions && data.predictions[0] && data.predictions[0].bytesBase64Encoded) {
+                return data.predictions[0].bytesBase64Encoded;
+            } else if (data.predictions && data.predictions[0] && data.predictions[0].mimeType && data.predictions[0].bytesBase64Encoded) {
+                // Some versions might return it this way
+                return data.predictions[0].bytesBase64Encoded;
+            }
+
+            console.log("Unexpected Image generation response structure:", JSON.stringify(data, null, 2));
+            return null;
+
+        } catch (error) {
+            console.error("Gemini Image Generation Error:", error);
+            return null;
         }
     },
 

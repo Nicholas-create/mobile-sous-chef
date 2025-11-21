@@ -1,7 +1,10 @@
 import { Stack } from 'expo-router';
+import { LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider } from '../context/AppContext';
 import '../global.css';
+
+LogBox.ignoreLogs(['SafeAreaView has been deprecated']);
 
 export default function Layout() {
   return (
