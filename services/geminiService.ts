@@ -36,7 +36,7 @@ export const GeminiService = {
       Suggest 3 distinct recipes based on: "${prompt}".
       Use ${system} units for 'amount'.
       CRITICAL: Fill 'amountMetric' AND 'amountImperial' fields for every ingredient.
-      CRITICAL: Include 'calories' field with estimated calories per serving for EVERY recipe.
+      CRITICAL: The 'calories' field is REQUIRED and MANDATORY for EVERY recipe. Include estimated calories per serving (as a number, not a string or range).
       Ensure ingredients are categorized.
       Mark staples (salt, oil) as isPantryItem: true.
 
@@ -75,8 +75,8 @@ export const GeminiService = {
         const fullPrompt = `
       Identify ingredients in this image. Suggest 3 recipes made primarily with them.
       Assume pantry staples are available. Use ${system} units.
-      CRITICAL: Fill 'amountMetric' AND 'amountImperial'.
-      CRITICAL: Include 'calories' field with estimated calories per serving for EVERY recipe.
+      CRITICAL: Fill 'amountMetric' AND 'amountImperial' for every ingredient.
+      CRITICAL: The 'calories' field is REQUIRED and MANDATORY for EVERY recipe. Include estimated calories per serving (as a number, not a string or range).
 
       Return a JSON array matching this schema: ${RECIPE_SCHEMA}
     `;
@@ -124,7 +124,8 @@ export const GeminiService = {
       2. 'Fast' (Under 20 mins)
       3. 'Craving' (Contextual comfort food)
       Use ${system} units. Populate 'suggestionType' and 'suggestionReason'.
-      CRITICAL: Include 'calories' field with estimated calories per serving for EVERY recipe.
+      CRITICAL: Fill 'amountMetric' AND 'amountImperial' for every ingredient.
+      CRITICAL: The 'calories' field is REQUIRED and MANDATORY for EVERY recipe. Include estimated calories per serving (as a number, not a string or range).
 
       Return a JSON array matching this schema: ${RECIPE_SCHEMA}
     `;

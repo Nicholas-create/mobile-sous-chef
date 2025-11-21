@@ -60,17 +60,14 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
             color: '#0f172a',
             className: 'bg-white border border-slate-200',
         },
-    ];
-
-    if (recipe.calories) {
-        metaChips.push({
+        {
             key: 'calories',
             icon: Flame,
             label: `${recipe.calories} cal`,
             color: '#ea580c',
             className: 'bg-orange-50 border border-orange-100',
-        });
-    }
+        },
+    ];
 
     return (
         <TouchableOpacity
