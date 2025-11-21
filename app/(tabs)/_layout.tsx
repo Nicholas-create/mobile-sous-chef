@@ -3,7 +3,6 @@ import { BookOpen, Home, Settings, ShoppingBag } from 'lucide-react-native';
 import React from 'react';
 import { Platform } from 'react-native';
 
-import { HapticTab } from '@/components/haptic-tab';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -15,7 +14,6 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: true,
-        tabBarButton: HapticTab,
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
@@ -32,7 +30,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="preferences"
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => <Settings size={28} color={color} />,

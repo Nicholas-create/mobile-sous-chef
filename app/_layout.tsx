@@ -6,8 +6,7 @@ import '../global.css';
 
 LogBox.ignoreLogs([
   'SafeAreaView has been deprecated',
-  'SafeAreaView has been deprecated and will be removed in a future release. Please use \'react-native-safe-area-context\' instead.',
-  'SafeAreaView has been deprecated and will be removed in a future release. Please use \'react-native-safe-area-context\' instead. See https://github.com/th3rdwave/react-native-safe-area-context'
+  'SafeAreaView has been deprecated and will be removed in a future release.',
 ]);
 
 export default function Layout() {

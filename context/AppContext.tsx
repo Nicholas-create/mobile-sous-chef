@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Recipe, ShoppingItem } from '../types';
 
 interface AppContextType {
@@ -53,7 +53,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
     };
 
-    const toggleSaveRecipe = (recipe: Recipe) => {
+    const toggleSaveRecipe = useCallback((recipe: Recipe) => {
         setSavedRecipes(prev => {
             const exists = prev.find(r => r.id === recipe.id);
             if (exists) {
@@ -61,41 +61,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             }
             return [...prev, recipe];
         });
-    };
+    }, []);
 
-    const addToShoppingList = (items: ShoppingItem[]) => {
+    const addToShoppingList = useCallback((items: ShoppingItem[]) => {
         setShoppingList(prev => [...prev, ...items]);
-    };
+    }, []);
 
-    const toggleShoppingItem = (itemId: string) => {
+    const toggleShoppingItem = useCallback((itemId: string) => {
         setShoppingList(prev => prev.map(item =>
             // Using name + recipeId as a pseudo-unique key if id is missing or generic
             (item.name + item.recipeId === itemId || (item as any).id === itemId)
                 ? { ...item, isBought: !item.isBought }
                 : item
         ));
-    };
+    }, []);
 
-    const removeShoppingItem = (itemId: string) => {
+    const removeShoppingItem = useCallback((itemId: string) => {
         setShoppingList(prev => prev.filter(item => (item.name + item.recipeId !== itemId && (item as any).id !== itemId)));
-    }
+    }, []);
 
-    const clearShoppingList = () => {
+    const clearShoppingList = useCallback(() => {
         setShoppingList([]);
-    }
+    }, []);
+
+    const value = React.useMemo(() => ({
+        savedRecipes,
+        shoppingList,
+        measurementSystem,
+        toggleSaveRecipe,
+        addToShoppingList,
+        toggleShoppingItem,
+        setMeasurementSystem,
+        clearShoppingList,
+        removeShoppingItem
+    }), [savedRecipes, shoppingList, measurementSystem, toggleSaveRecipe, addToShoppingList, toggleShoppingItem, clearShoppingList, removeShoppingItem]);
 
     return (
-        <AppContext.Provider value={{
-            savedRecipes,
-            shoppingList,
-            measurementSystem,
-            toggleSaveRecipe,
-            addToShoppingList,
-            toggleShoppingItem,
-            setMeasurementSystem,
-            clearShoppingList,
-            removeShoppingItem
-        }}>
+        <AppContext.Provider value={value}>
             {children}
         </AppContext.Provider>
     );
