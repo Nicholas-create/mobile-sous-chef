@@ -1,8 +1,10 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useApp } from '../../context/AppContext';
 
 export default function Preferences() {
+    const router = useRouter();
     const { measurementSystem, setMeasurementSystem } = useApp();
 
     return (
@@ -34,6 +36,13 @@ export default function Preferences() {
                     <Text className="text-lg font-bold text-slate-900 mb-2">About</Text>
                     <Text className="text-slate-500">Mobile Sous-Chef v1.0.0</Text>
                     <Text className="text-slate-500">Powered by Gemini AI</Text>
+                </View>
+
+                <View className="bg-white p-4 rounded-2xl mb-4">
+                    <Text className="text-lg font-bold text-slate-900 mb-2">Legal</Text>
+                    <Pressable onPress={() => router.push('/legal')}>
+                        <Text className="text-blue-600 font-semibold">Terms & Privacy Policy</Text>
+                    </Pressable>
                 </View>
             </View>
         </View>
