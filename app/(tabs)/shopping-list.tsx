@@ -67,12 +67,17 @@ export default function ShoppingList() {
                         <View key={group} className="mb-6">
                             <Text className="text-lg font-bold text-slate-800 mb-2 uppercase tracking-wider">{group}</Text>
                             <View className="bg-white rounded-2xl overflow-hidden">
-                                {items.map((item, index) => (
+                                {items.map((item) => (
                                     <TouchableOpacity
-                                        key={index}
+                                        key={item.id}
                                         className={`flex-row items-center p-4 border-b border-slate-100 ${item.isBought ? 'bg-slate-50' : 'bg-white'}`}
-                                        onPress={() => toggleShoppingItem(item.name + item.recipeId)}
-                                        onLongPress={() => removeShoppingItem(item.name + item.recipeId)}
+                                        onPress={() => toggleShoppingItem(item.id)}
+                                        onLongPress={() => removeShoppingItem(item.id)}
+                                        accessible={true}
+                                        accessibilityRole="checkbox"
+                                        accessibilityState={{ checked: item.isBought }}
+                                        accessibilityLabel={`${item.name}, ${formatIngredientAmount(item, measurementSystem)}${groupBy === 'category' ? `, from ${item.recipeName}` : ''}`}
+                                        accessibilityHint={item.isBought ? "Double tap to mark as not purchased. Long press to remove from list." : "Double tap to mark as purchased. Long press to remove from list."}
                                     >
                                         <View className={`w-6 h-6 rounded-full border mr-3 items-center justify-center ${item.isBought ? 'bg-slate-300 border-slate-300' : 'border-orange-500'}`}>
                                             {item.isBought && <View className="w-3 h-3 bg-white rounded-full" />}

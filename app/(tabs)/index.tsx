@@ -33,6 +33,10 @@ export default function Dashboard() {
                         className="bg-white border border-orange-100 rounded-[32px] p-5 overflow-hidden mb-4"
                         activeOpacity={0.9}
                         onPress={() => router.push('/planner')}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel="Planner"
+                        accessibilityHint="Generate recipes from text description. Double tap to open planner."
                     >
                         <View className="absolute -right-8 -top-10 h-28 w-28 bg-orange-50 rounded-full" />
                         <View className="z-10">
@@ -51,6 +55,10 @@ export default function Dashboard() {
                         className="bg-white border border-blue-100 rounded-[32px] p-5 overflow-hidden mb-4"
                         activeOpacity={0.9}
                         onPress={() => router.push('/scavenger')}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel="Scavenger"
+                        accessibilityHint="Generate recipes from fridge photo. Double tap to open camera."
                     >
                         <View className="absolute -right-8 -top-10 h-28 w-28 bg-blue-50 rounded-full" />
                         <View className="z-10">
@@ -69,6 +77,10 @@ export default function Dashboard() {
                         className="bg-white border border-emerald-100 rounded-[32px] p-5 overflow-hidden mb-6"
                         activeOpacity={0.9}
                         onPress={() => router.push('/daily-menu')}
+                        accessible={true}
+                        accessibilityRole="button"
+                        accessibilityLabel="Inspire Me - Daily Menu"
+                        accessibilityHint="View AI-curated daily menu with fast, efficient, and comfort food options. Double tap to open."
                     >
                         <View className="absolute -right-8 -top-10 h-28 w-28 bg-emerald-50 rounded-full" />
                         <View className="z-10">

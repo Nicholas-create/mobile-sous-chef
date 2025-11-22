@@ -69,11 +69,17 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
         },
     ];
 
+    const accessibilityLabel = `${recipe.title}. ${recipe.description}. Prep time ${recipe.prepTime}, cook time ${recipe.cookTime}. Serves ${recipe.servings}, ${recipe.calories} calories per serving.`;
+
     return (
         <TouchableOpacity
             className="mb-6 overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm shadow-slate-200"
             activeOpacity={0.93}
             onPress={() => router.push({ pathname: '/recipe/[id]', params: { id: recipe.id, recipeData: JSON.stringify(recipe) } })}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={accessibilityLabel}
+            accessibilityHint="Double tap to view full recipe details"
         >
             <View className="relative h-48 bg-slate-100">
                 {recipe.imageUrl ? (

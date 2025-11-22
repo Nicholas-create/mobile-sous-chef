@@ -3,7 +3,11 @@ import { LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AppProvider } from '../context/AppContext';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { initErrorTracking } from '../services/errorTracking';
 import '../global.css';
+
+// Initialize error tracking on app start
+initErrorTracking();
 
 LogBox.ignoreLogs([
   'SafeAreaView has been deprecated',
